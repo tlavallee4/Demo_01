@@ -1,12 +1,24 @@
 // import the express application and type definition
 import express, {Express} from "express";
 
+// import morgan
+import morgan from "morgan";
+
+// import itemRoutes
+import itemRouter from "./api/v1/routes/itemRoutes";
+
 // import setupSwagger endpoint
 import setupSwagger from "../config/swagger";
 import { timeStamp } from "console";
 
 // initialize the express application 
 const app: Express = express();
+
+// use morgan fr http request logging
+app.use(morgan("combined"));
+
+// 
+app.use(express.json());
 
 // setup swagger for api documentation
 setupSwagger(app);
@@ -53,6 +65,9 @@ app.get("/api/v1/health", (req, res) => {
         version: "1.0.0"
     });
 });
+
+// register itemRoutes
+app.use("/api/v1/items", itemRouter);
 
 // export app and server for testing
 export default app;
